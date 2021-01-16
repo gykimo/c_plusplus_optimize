@@ -9,8 +9,9 @@ how to run: cd one case dir, and excute ./run.sh, then will print cost logs.
 
 # cases
 ## pointerset_vs_valueset
-pointerset is bettet than valueset, about more than 50% improvement.
+pointerset is better than valueset, about more than 50% improvement.
 
+```
 good: pointerset
 
 real	0m0.428s
@@ -24,4 +25,93 @@ bad: valueset
 real	0m0.711s
 user	0m0.499s
 sys	0m0.004s
+```
 
+## spinlock_vs_mutex
+spinlock(spinlock_webrtc) is better if protected scope consumes little time.  
+mutex(mutex_heavy_task) is better if protected scope consumes much time. 
+
+### protected scope consume little time
+like cases bellow, count_ plus 1 safely, that will cost little time.  
+
+#### mutex
+sys cost much, because mutex need system scheduling  
+user cost is near with user cost of spinlock_webrtc  
+logs bellow:  
+
+```
+[case 1] mutex:
+
+real	0m1.594s
+user	0m0.717s
+sys	0m0.997s
+```
+
+#### spinlock_loop_nothing
+doing nothing in each loop is not good, because that causes many __sync_val_compare_and_swap times.  
+so user cost is very high, but sys cost is very low.  
+this case shows that if spinlock is not implemented well, it's performance will be worse than mutex.  
+
+```
+[case 2] spinlock_loop_nothing:
+
+real	0m2.348s
+user	0m4.085s
+sys	0m0.019s
+```
+#### spinlock_loop_sleep
+to improve spinlock_loop_nothing, we add sleep(0) between each loop, sleep(0) means system maybe change current thread to sleep state.  
+so, user time is low, but sys time is higher than spinlock_loop_nothing.  
+but as a whole, spinlock_loop_sleep is better than spinlock_loop_nothing.  
+logs bellow:
+```
+[case 3] spinlock_loop_sleep:
+
+real	0m0.674s
+user	0m0.492s
+sys	0m0.257s
+```
+#### spinlock_loop_nanosleep
+nanosleep vs sleep(0).
+```
+[case 4] spinlock_loop_nanosleep:
+
+real	0m0.751s
+user	0m0.676s
+sys	0m0.238s
+```
+#### spinlock_webrtc(sched_yield)
+spinlock_webrtc call sched_yield() in each loop.  
+sched_yield() causes the calling thread to relinquish the CPU. The thread is moved to the end of the queue for its static priority and a new thread gets to run.  
+sched_yield() is better than sleep, because sys time is low.
+```
+[case 5] spinlock_webrtc:
+
+real	0m0.737s
+user	0m0.799s
+sys	0m0.082s
+```
+### protected scope consume much time
+like cases bellow, do some memory operation in protected scope, that will cost much time.  
+
+#### mutex_heavy_task
+most of time runs in user time, like memory operations.  
+sys time is low.  
+```
+[case 6] mutex_heavy_task:
+
+real	0m3.377s
+user	0m3.084s
+sys	0m0.061s
+```
+
+#### spinlock_webrtc_heavy_task
+sys time and user time are both much higher than mutex.  
+so if protected scope will cost much time, mutex is better.
+```
+[case 7] spinlock_webrtc_heavy_task:
+
+real	0m3.476s
+user	0m5.742s
+sys	0m0.491s
+```
