@@ -8,7 +8,7 @@ how to run: cd one case dir, and excute ./run.sh, then will print cost logs.
 进入每个示例，直接执行./run.sh，就可以打印出相应的对比log。 
 
 # cases
-## pointerset_vs_valueset
+## pointerset_vs_valueset(1 vs 2)
 pointerset is better than valueset, about more than 50% improvement.
 
 ```
@@ -114,4 +114,23 @@ so if protected scope will cost much time, mutex is better.
 real	0m3.476s
 user	0m5.742s
 sys	0m0.491s
+```
+## stl
+### map_vs_unordered_map(3 vs 1)
+map's cost is about 3 times as unordered_map.
+```
+[case 1] map:
+
+real	0m2.029s
+user	0m1.784s
+sys	0m0.030s
+
+==========================
+[case 2] unordered_map:
+
+real	0m0.871s
+user	0m0.619s
+sys	0m0.028s
+
+==========================
 ```
