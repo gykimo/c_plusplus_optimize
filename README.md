@@ -134,3 +134,42 @@ sys	0m0.028s
 
 ==========================
 ```
+
+### vector
+1. reserve < resize = ctor < push_back
+2. reserve, resize, ctor has the same sys cost, because they malloc memory one time.
+3. reserve's user cost is least, because reserve just allocate memory without call TestClass ctor.
+but resize and vector_ctor allocate memory and call TestClass ctor.
+4. push_back's sys cost is highest, because vector need reallocate memory while push_back if memory not enough.
+5. push_back's user cost is higher than resize, but why?
+
+```
+[case 1] vector_push_back:
+
+real	0m1.952s
+user	0m1.396s
+sys	0m0.433s
+
+==========================
+[case 2] vector_resize:
+
+real	0m1.311s
+user	0m1.050s
+sys	0m0.144s
+
+==========================
+[case 3] vector_ctor:
+
+real	0m1.305s
+user	0m1.051s
+sys	0m0.141s
+
+==========================
+[case 4] vector_reserve:
+
+real	0m0.720s
+user	0m0.462s
+sys	0m0.142s
+
+==========================
+```
