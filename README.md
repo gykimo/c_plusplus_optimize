@@ -27,6 +27,66 @@ user	0m0.499s
 sys	0m0.004s
 ```
 
+## add_vs_macro_vs_inline_func_vs_func_vs_atomic
+```
+[case 1] add_+:
+
+real	0m0.756s
+user	0m0.234s
+sys	0m0.003s
+
+==========================
+[case 2] add_macro:
+
+real	0m0.314s
+user	0m0.234s
+sys	0m0.003s
+
+==========================
+[case 3] add_inline_func:
+
+real	0m0.680s
+user	0m0.378s
+sys	0m0.002s
+
+==========================
+[case 4] add_func:
+
+real	0m0.791s
+user	0m0.388s
+sys	0m0.003s
+
+==========================
+[case 5] add_atomic:
+
+real	0m1.278s
+user	0m0.937s
+sys	0m0.004s
+```
+
+## shared_ptr_vs_not
+```
+[case 1] not_share_ptr_1attrs:
+
+real	0m0.746s
+user	0m0.230s
+sys	0m0.005s
+
+==========================
+[case 2] not_share_ptr_1000attrs:
+
+real	0m5.798s
+user	0m5.362s
+sys	0m0.023s
+
+==========================
+[case 3] share_ptr:
+
+real	0m5.422s
+user	0m5.059s
+sys	0m0.018s
+```
+
 ## spinlock_vs_mutex
 spinlock(spinlock_webrtc) is better if protected scope consumes little time.  
 mutex(mutex_heavy_task) is better if protected scope consumes much time. 
