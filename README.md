@@ -64,6 +64,25 @@ user	0m0.937s
 sys	0m0.004s
 ```
 
+## shared_ptr_vs_other_auto_ptr
+Linux:
+```
+[case 1] shared_ptr:
+
+real	0m0.515s
+user	0m0.511s
+sys	0m0.001s
+
+==========================
+[case 2] webrtc_ref:
+
+real	0m0.277s
+user	0m0.275s
+sys	0m0.000s
+
+
+```
+
 ## shared_ptr_vs_not
 ```
 [case 1] not_share_ptr_1attrs:
