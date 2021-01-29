@@ -106,6 +106,22 @@ user	0m5.059s
 sys	0m0.018s
 ```
 
+## mutex_vs_recursive_mutex
+```
+[case 1] mutex:
+
+real	0m2.942s
+user	0m2.321s
+sys	0m5.533s
+
+==========================
+[case 2] recursive_mutex:
+
+real	0m4.278s
+user	0m3.592s
+sys	0m9.022s
+```
+
 ## spinlock_vs_mutex
 spinlock(spinlock_webrtc) is better if protected scope consumes little time.  
 mutex(mutex_heavy_task) is better if protected scope consumes much time. 
